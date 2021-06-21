@@ -250,7 +250,8 @@ wire red_detect,green_detect,blue_detect,orange_detect,dblue_detect;
 assign green_detect = green_hsv && ~blue_hsv && ~red_hsv && ~orange_hsv && ~dblue_hsv;
 assign red_detect = ~green_hsv && ~blue_hsv && red_hsv && ~orange_hsv && ~dblue_hsv;
 assign blue_detect = blue_hsv && ~red_hsv && ~green_hsv && ~orange_hsv && ~dblue_hsv;
-assign orange_detect = orange_hsv && blue_hsv && ~red_hsv && ~green_hsv && ~dblue_hsv;
+assign orange_detect = orange_hsv && ~blue_hsv && ~red_hsv && ~green_hsv && ~dblue_hsv;
+assign dblue_detect = ~orange_hsv && ~blue_hsv && ~red_hsv && ~green_hsv && dblue_hsv;
  
 
  
