@@ -1,0 +1,6 @@
+22:53:10 **** Clean-only build of configuration Nios II for project D8M_Camera_Test_bsp ****
+make clean 
+[BSP clean complete]
+
+22:53:14 Build Finished (took 3s.571ms)
+
