@@ -70,14 +70,14 @@ void setup() {
      Serial.print(".");  
   }
   Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.print("IP Address: ");
+  Serial.println("WiFi is connected");
+  Serial.print("Client IP Address:");
   Serial.println(WiFi.localIP());
   delay(500);
   if(client.connect(host, port)){       //connect(ip/url, port)
-    Serial.println("Handshake successful");
+    Serial.println("Handshake Successful!!!");
   }else{
-    Serial.println("Handshake Failed"); 
+    Serial.println("Handshake Failed!!!"); 
   }
 }
 
