@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link href="slider.css" rel="stylesheet">
+
+</head>
+
+<style>
+    .bar {
+        margin: 35px;
+    }
+
+    .top {
+        margin: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        display: grid;
+
+
+
+    }
+
+    .top1 {
+        box-shadow: 0 0 4px black;
+        border-radius: 5px;
+        height: 300px;
+
+    }
+
+    .buttom {
+        margin: 10px;
+    }
+
+    .down {
+        margin: auto;
+        width: auto;
+        display: grid;
+        margin: 10px;
+
+    }
+
+    .down1 {
+        box-shadow: 0 0 4px black;
+        border-radius: 5px;
+        height: fit-content;
+
+    }
+
+    .slider {
+
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        border-radius: 5px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #04AA6D;
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #04AA6D;
+        cursor: pointer;
+    }
+</style>
+
+<body onload="refreshTable(document, 4, 5)">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Command App</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="to_main()">
+                            <span class="material-icons">
+                                home
+                            </span>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="to_manual()">
+                            <span class="material-icons">
+                                swipe
+                            </span>Manual mode
+                        </a>
+                    </li>
+                    <li class="nav-item" href="#">
+                        <a class="nav-link active" aria-current="page" href="#">
+                            <span class="material-icons">
+                                directions_car_filled
+                            </span>Auto Mode
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <form class="d-flex">
+                <input type="number" class="form-control" id="max_x" placeholder="please input x">
+                <input type="number" class="form-control" id="max_y" placeholder="please input y">
+                <button class="btn btn-outline-light" type="submit" onclick="setXYValue()">Enter</button>
+            </form>
+        </div>
+    </nav>
+    </br>
+    <dl>
+        <dd>
+            <div class="top">
+                <div class="top1">
+                    </br>
+                    <dl>
+                        <!-- <dd>
+                            <div class="buttom">
+                                <div class="btn-group" role="group" id="speed_buttom">
+                                    <button type="button" onclick="lowspeed()"
+                                        class="btn btn-success btn-focus-box-shadow">low speed</button>
+                                    <button type="button" onclick="middlespeed()"
+                                        class="btn btn-warning btn-focus-box-shadow">fast speed</button>
+                                    <button type="button" onclick="highspeed()"
+                                        class="btn btn-danger btn-focus-box-shadow">ROCKET SEEEEPD!</button>
+                                </div>
+                            </div>
+                        </dd> -->
+                        <dd>
+                            </br>
+                            <div class="slidecontainer">
+                                <input type="range" min="1" max="3" value="1" class="slider" id="myRange">
+                                <p>Current speed: <span id="demo"></span>X</p>
+                            </div>
+
+
+
+                        </dd>
+                    </dl>
+                </div>
+                <div class="top1">
+                    <p class="text-center fs-1 fw-bolder">SoC: 75% </p>
+                    <div class="bar">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <P class="text-center fs-5 fw-bolder">Estimated Range: 2000m</p>
+                    <div>
+                    </div>
+        </dd>
+        <dd>
+            <div class="down">
+                <div class="down1">
+                    <p class="text-center fs-1 fw-bolder text-uppercase">mapping display</p>
+                    <div class="container-fluid" id="root">
+
+                    </div>
+                </div>
+            </div>
+        </dd>
+        <dd>
+            <div class="down">
+                </br>
+                <div class="down1">
+                    <p onclick="getValue()">vision display</p>
+                </div>
+            </div>
+        </dd>
+    </dl>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="update_ui.js"></script>
+<script>
+    function to_main() {
+        var jump = confirm("Are you sure that you want to return to Home page, please ensure the rover has done excuting the current instruction")
+        if (jump == true) {
+            window.location.href = "bootstrape.html"
+        }
+    }
+    function to_manual() {
+        var jump = confirm("Are you sure that you want to switch to manual mode, please ensure the rover has done excuting the current instruction")
+        if (jump == true) {
+            window.location.href = "manual.html"
+        }
+    }
+    function get(url) {
+        console.log('run get:')
+        $.get(url, function (data) {
+            $(".result").html(data);
+            console.log(data);
+        });
+    }
+
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function () {
+        output.innerHTML = this.value;
+    }
+
+    //function main() {
+    //var a = getValue();
+
+
+
+    //}
+    function setXYValue() {
+        var x = document.getElementById("max_x").value;
+        var y = document.getElementById("max_y").value;
+        x = x.padStart(3, "0");
+        y = y.padStart(3, "0");
+
+        var data = JSON.stringify("11" + x + y + slider.value);
+        let url = "/api/auto-send/" + data;
+
+        get(url)
+
+    }
+
+    var oIds = []
+    var carId = '1-1';
+    var direction = "1"
+    //var blink = false;
+
+    function getObstacle() {
+        var url = "/api/get-obstacle"
+        $.get(url, function (data) {
+            $(".result").html(data)
+            oIds = data['data']['obstacles']
+        });
+    }
+
+    function setObstacle(oid) {
+        var url = "/api/set-obstacle/" + oid
+        $.get(url, function (data) {
+            $(".result").html(data);
+            getObstacle()
+        });
+
+    }
+
+
+    function carSync() {
+        var url = "/api/get_auto_receive";
+
+        $.get(url, function (data) {
+            $(".result").html(data);
+            // alert( "Load was performed." );
+            // console.log(data);
+
+
+            if (data == null) {
+                console.log("enter null statement")
+                get('/api/done-update/' + "-1")
+
+            } else {
+                var data = data['data'];
+                console.log("-----data-------")
+                console.log(data)
+
+                var recv_id = data['id'];
+                var send_id = data['send_id'];
+                var done_id = data['done_id'];
+                console.log("-------done id --------")
+                console.log(done_id)
+
+            }
+            if (data != null && done_id < recv_id) {
+
+                direction = data['direction']
+                console.log(send_id)
+                carId = data['grid_id']
+                refreshTable(document, 4, 5)
+
+                console.log("-------car update")
+                // update_car(document, data, dir);
+
+                if (data['obstacle'] == "1") {
+                    var chars = data["grid_id"].split('-');
+                    console.log(data["grid_id"])
+                    var x = parseInt(chars[0])
+                    var y = parseInt(chars[1])
+                    var k = parseInt(chars[0]) + 1
+                    // console.log(k + 1 + "-")
+
+                    var ido;
+                    if (direction == 0) {
+                        if (x - 1 > 0) { ido = (x - 1) + "-" + y }
+
+                    } else if (direction == 1) {
+                        if (y + 1 <= 5) { ido = x + "-" + (y + 1) }
+
+                    } else if (direction == 2) {
+                        if (x + 1 <= 4) { ido = (x + 1) + "-" + y }
+
+                    } else if (direction == 3) {
+                        if (y - 1 > 0) { ido = x + "-" + (y - 1) }
+
+                    }
+
+                    console.log('----ido-------')
+                    console.log(ido)
+                    console.log('----ido-------')
+                    // update_obstacle(document, ido)
+                    var idoc = ido + "9" + data['obstacle']
+                    setObstacle(idoc)
+                }
+                get('/api/done-update/' + recv_id)
+
+                //blink = false;
+            }
+
+        });
+    }
+
+
+    function flashRed() {
+        if (blink) {
+            console.log("---------blink-------")
+            console.log(blink)
+            var today = new Date();
+            var s = today.getSeconds()
+            console.log(s)
+            var car = document.getElementById(carId);
+            console.log('---------------')
+            // console.log(carId);
+            console.log(car.style.backgroundColor)
+            // console.log(car)
+            console.log('---------------')
+            var colors = ['#dc3545', '#ffc107']
+            car.style.backgroundColor = colors[s % 2]
+            // if (s % 2 == 0) {
+            //     // bgc = '#F75000'
+            //     car.style.backgroundColor = '#dc3545'
+            // } else {
+            //     car.style.backgroundColor = '#ffc107'
+            // }
+
+        }
+    }
+
+    function flashOrange() {
+        var car = document.getElementById(carId);
+        car.style.backgroundColor = '#ffc107'
+    }
+
+    function roverRefreshAll(document, carId, direction) {
+        //     carSync()
+        refreshTable(document, 4, 5)
+        carSync()
+        // console.log(oIds)
+        // console.log('----------')
+        getObstacle()
+        if (oIds.length > 0) {
+            fillObstacle(document, oIds)
+        }
+        fillCar(document, carId, direction)
+    }
+
+    setInterval("roverRefreshAll(document, carId, direction)", 1000);
+    // setInterval("flashOrange()", 500)
+    //setInterval("flashRed()", 1000)
+
+
+
+
+        // setInterval("flashOrange()", 500)ar objData = JSON.parse(data)['data'];
+        //         console.log(objData);
+
+        //         var gridId = objData['grid_id'];
+
+        //         if (objData['obstacle'] == "1") {
+        //             // change_red(gridId);
+        //             update_car(gridId, objData["direction"])
+
+        //         } else {
+        //             // change_red(gridId);
+        //             update_car(gridId, objData["direction"])
+        //             change_yellow(gridId);
+        //         }
+        //     });
+        // }
+
+        // function httpGet(url) {
+        //     loaderCaller();
+        //     let xhr = new XMLHttpRequest();
+        //     xhr.onreadystatechange = function () {
+        //         if (xhr.readyState == "1" && xhr.status == "0") {
+        //             var data = JSON.stringify(xhr.responseText);
+        //             console.log(data);
+        //         }
+        //     };
+        //     xhr.open("GET", url, false);
+        //     xhr.setRequestHeader("Content-Type", "application/json");
+        // }
+
+        // ------------------
+        // get end
+        // ------------------
+
+
+        // function update_obstacle(document, id) {
+        //     var cell = document.getElementById(id);
+        //     var img = document.createElement('img');
+        //     img.id = 'img-obstacle';
+        //     img.width = 50;
+        //     img.src = 'o.png'
+        //     img.style = "margin-left: auto; margin-right: auto; display: block;"
+
+        //     var car = document.getElementById('img-obstacle');
+        //     if (!car) {
+        //         cell.appendChild(img);
+        //     }
+        //     else {
+        //         car.src = 'o.png'
+        //     }
+
+        //     document.getElementById(id).style.backgroundColor = "#ffc107";
+        // }
+
+        // function syncRover() {
+
+        //     var url = "/api/get_auto_receive";
+        //     $.get(url, function (data) {
+        //         $(".result").html(data);
+        //         var data = data['data'];
+        //         var direction = data['direction'];
+        //         if (data) {
+        //             var x = Math.floor(data['x'] / 24) + 1;
+        //             var y = Math.floor(data['y'] / 10) + 1;
+        //             var cell_id = y + '-' + x;
+        //             console.log(cell_id);
+        //             update_car(document, cell_id, direction);
+        //         }
+
+        //         var obstacle = data['obstacle'];
+        //         if (obstacle == 1) {
+        //             //    0 
+        //             // 3     1
+        //             //    2
+        //             var o_left = x
+        //             if (direction == 0) { o_right = y + 1 }
+        //             if (direction == 2) { o_right = y - 1 }
+
+        //             var o_right = y
+        //             if (direction == 1) { o_left = x + 1 }
+        //             if (direction == 3) { o_left = x - 1 }
+
+        //             var o_id = o_left + '-' + o_right;
+        //             console.log(o_id);
+
+        //             update_obstacle(document, o_id);
+        //         }
+        //     });
+        // }
+
+
+        // // function change_red(id) {
+
+        // function change_yellow(id) {
+        //     document.getElementById(id).style.backgroundColor = "#dc3545";
+        //     document.getElementById(id).innerHTML = "current location"
+        // }
+        // function change_back(id) {
+        //     document.getElementById(id).style.backgroundColor = "#198754";
+        //     document.getElementById(id).innerHTML = "current location"
+        // }
+
+        // setInterval("syncRover()", 1000);
+
+        // function fill() {
+        //     var cell = document.createElement('div');
+        //     cell.class = 'col';
+        //     cell.style = 'background-color: #198754;'
+        //     // <div class="p-3 border" id="1-2" style="">
+        //     document.getElementById(id).style.backgroundColor = "#198754";
+
+        // }
+
+</script>
+
+</html>

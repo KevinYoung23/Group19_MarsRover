@@ -1,0 +1,533 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        .slidecontainer {
+            margin: 10px;
+        }
+
+        .bar {
+            margin: 35px;
+        }
+
+        .top {
+            margin: auto;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            display: grid;
+            margin: 10px;
+
+
+
+        }
+
+        .top1 {
+            box-shadow: 0 0 4px black;
+            border-radius: 5px;
+            height: 300px;
+            vertical-align: middle;
+
+
+
+        }
+
+        .buttom {
+            margin: 10px;
+        }
+
+        .down {
+            margin: auto;
+            width: auto;
+            display: grid;
+            margin: 10px;
+
+        }
+
+        .down1 {
+            box-shadow: 0 0 4px black;
+            border-radius: 5px;
+            height: fit-content;
+        }
+    </style>
+
+</head>
+
+<body onload="refreshTable(document, 4, 5)">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Command App</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="to_main()">
+                            <span class="material-icons">
+                                home
+                            </span>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">
+                            <span class="material-icons">
+                                swipe
+                            </span>Manual mode
+                        </a>
+                    </li>
+                    <li class="nav-item" href="#">
+                        <a class="nav-link" onclick="to_auto()">
+                            <span class="material-icons">
+                                directions_car_filled
+                            </span>Auto Mode
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <dl>
+        <dd>
+            <div class="top">
+                <div class="top1">
+                    </br>
+                    <div class="buttom">
+                        <div class="btn-group" role="group" id="forward_buttom">
+                            <button type="button" class="btn btn-outline-info btn-focus-box-shadow"
+                                onclick="forward()">Forward</button>
+                            <button type="button" class="btn btn-outline-primary btn-focus-box-shadow"
+                                onclick="backward()">Backward</button>
+                        </div>
+                    </div>
+                    <div class="buttom">
+                        <div class="btn-group" role="group" id="right_buttom">
+                            <button type="button" class="btn btn-outline-info btn-focus-box-shadow"
+                                onclick="left()">Turn
+                                left</button>
+                            <button type="button" class="btn btn-outline-primary btn-focus-box-shadow"
+                                onclick="right()">Turn right</button>
+                        </div>
+                    </div>
+                    <div class="slidecontainer">
+                        <input type="range" min="1" max="3" value="1" class="slider" id="myRange">
+                        <p>Current speed: <span id="demo"></span>X</p>
+                    </div>
+                </div>
+                <div class="top1">
+                    <p class="text-center fs-1 fw-bolder">SoC: 75% </p>
+                    <div class="bar">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <P class="text-center fs-5 fw-bolder">Estimated Range: 2000m</p>
+                    <div>
+                    </div>
+
+                </div>
+        </dd>
+        <dd>
+            <div class="down">
+                <div class="down1">
+                    <p class="text-center fs-1 fw-bolder text-uppercase">mapping display</p>
+                    <div class="container-fluid" id="root">
+                    </div>
+                </div>
+            </div>
+        </dd>
+
+        <dd>
+            <div class="down">
+                </br>
+                <div class="down1">
+                    <p>vision display</p>
+                </div>
+            </div>
+        </dd>
+    </dl>
+
+
+    <script src="update_ui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var slider = document.getElementById("myRange");
+        var output = document.getElementById("demo");
+        output.innerHTML = slider.value;
+
+        slider.oninput = function () {
+            output.innerHTML = this.value;
+        }
+        function to_main() {
+            var jump = confirm("Are you sure that you want to return to Home page, please ensure the rover has done excuting the current instruction")
+            if (jump == true) {
+                window.location.href = "bootstrape.html"
+            }
+        }
+        function to_auto() {
+            var jump = confirm("Are you sure that you want to switch to auto mode, please ensure the rover has done excuting the current instruction")
+            if (jump == true) {
+                window.location.href = "auto.html"
+            }
+        }
+        // function AutoRefresh(t) {
+        //     setTimeout("location.reload(true);", t);
+        //     console.log("--------reloading-------")
+        // }
+        //-->
+
+        // function update_obstacle(document, id) {
+        //     var cell = document.getElementById(id);
+        //     var img = document.createElement('img');
+        //     img.id = 'img-obstacle';
+        //     img.width = 50;
+        //     img.src = 'o.png'
+        //     img.style = "margin-left: auto; margin-right: auto; display: block;"
+
+        //     var car = document.getElementById('img-obstacle');
+        //     if (!car) {
+        //         cell.appendChild(img);
+        //     }
+        //     else {
+        //         car.src = 'o.png'
+        //     }
+
+        //     document.getElementById(id).style.backgroundColor = "#ffc107";
+        // }
+
+
+        // function update_car(document, data_send, current_dir) {
+        //     console.log(data_send)
+        //     var dirs = {
+        //         "0": "car_u.png",
+        //         "1": "car_r.png",
+        //         "2": "car_d.png",
+        //         "3": "car_l.png",
+        //     };
+        //     var cell = document.getElementById(data_send["grid_id"]);
+
+        //     //cell.getElementById('img-car');
+
+        //     var img = document.createElement('img');
+        //     img.id = 'img-car';
+        //     img.width = 50;
+        //     img.src = dirs[current_dir];
+        //     img.style = "margin-left: auto; margin-right: auto; display: block;"
+
+        //     var car = document.getElementById('img-car');
+        //     if (!car) {
+        //         cell.appendChild(img);
+        //     }
+        //     else {
+        //         // var car = document.getElementById('img-car');
+        //         car.src = dirs[current_dir];
+        //     }
+
+
+        //     document.getElementById(data_send["grid_id"]).style.backgroundColor = "#ffc107";
+        //     // document.getElementById(id).innerHTML = "obstacle"
+        //     if (data_send['obstacle'] == "1") {
+        //         var chars = data_send["grid_id"].split('-');
+        //         console.log(data_send["grid_id"])
+        //         var x = parseInt(chars[0])
+        //         var y = parseInt(chars[1])
+        //         var ido;
+        //         var k = parseInt(chars[0]) + 1
+        //         console.log(k + 1 + "-")
+        //         if (current_dir == 0) {
+        //             ido = (x + 1) + "-" + y
+        //         } else if (current_dir == 1) {
+        //             ido = x + "-" + (y + 1)
+        //         } else if (current_dir == 2) {
+        //             ido = x + "-" + (y - 1)
+        //         } else if (current_dir == 3) {
+        //             ido = (x - 1) + "-" + y
+        //         }
+        //         console.log(ido)
+        //         update_obstacle(document, ido)
+        //     }
+        // }
+        function get(url) {
+            // loaderCaller();
+            // let xhr = new XMLHttpRequest();
+            // xhr.open("GET", url, false);
+            // xhr.setRequestHeader("Content-Type", "application/json");
+            // console.log(url);
+            // $.getScript(url);
+            $.get(url, function (data) {
+                $(".result").html(data);
+                // alert( "Load was performed." );
+                // console.log(data);
+            });
+        }
+
+
+
+        function change_red(id) {
+            document.getElementById(id).style.backgroundColor = "#dc3545";
+            document.getElementById(id).innerHTML = "obstacle"
+        }
+        function change_yellow(id) {
+            document.getElementById(id).style.backgroundColor = "#ffc107";
+            document.getElementById(id).innerHTML = "current location";
+        }
+
+        function forward() {
+            var speed = document.getElementById("myRange").value;
+            var url = "/api/manual-send/10111111" + speed;
+            // httpGet(url);
+
+            get(url);
+            // current_dir = current_dir + 0
+            // var chars = grid.split('-');
+            // var x = parseInt(chars[0])
+            // var y = parseInt(chars[1])
+            // if (current_dir == 0) {
+
+            //     grid = toString(x) + "-" + toString(y + 1)
+            // } else if (current_dir == 1) {
+
+            //     grid = toString(x + 1) + "-" + toString(y)
+            // } else if (current_dir == 2) {
+
+            //     grid = toString(x) + "-" + toString(y - 1)
+            // } else if (current_dir == 3) {
+            //     current_dir == 1;
+            //     grid = toString(x - 1) + "-" + toString(y)
+            // }
+            // grid = toString(x + 1) + "-" + toString(y)
+            // // console.log(url);
+        }
+
+        function backward() {
+            var speed = document.getElementById("myRange").value;
+            url = "api/manual-send/10222222" + speed;
+            get(url);
+            // var chars = grid.split('-');
+            // var x = parseInt(chars[0])
+            // var y = parseInt(chars[1])
+
+            // if (current_dir == 0) {
+            //     current_dir == 2;
+            //     grid = toString(x) + "-" + toString(y - 1)
+            // } else if (current_dir == 1) {
+            //     current_dir == 3;
+            //     grid = toString(x - 1) + "-" + toString(y)
+            // } else if (current_dir == 2) {
+            //     current_dir == 0;
+            //     grid = toString(x) + "-" + toString(y + 1)
+            // } else if (current_dir == 3) {
+            //     current_dir == 1;
+            //     grid = toString(x + 1) + "-" + toString(y)
+            // }
+
+
+
+        }
+
+        function right() {
+            var speed = document.getElementById("myRange").value;
+            url = "api/manual-send/10333333" + speed;
+            get(url);
+            // if (current_dir == 0) {
+            //     current_dir == 1;
+            // } else if (current_dir == 1) {
+            //     current_dir == 2;
+            // } else if (current_dir == 2) {
+            //     current_dir == 3;
+            // } else if (current_dir == 3) {
+            //     current_dir == 0;
+            // }
+        }
+
+        function left() {
+            var speed = document.getElementById("myRange").value;
+            url = "api/manual-send/10555555" + speed;
+            get(url);
+            // if (current_dir == 0) {
+            //     current_dir == 3;
+            // } else if (current_dir == 1) {
+            //     current_dir == 0;
+            // } else if (current_dir == 2) {
+            //     current_dir == 1;
+            // } else if (current_dir == 3) {
+            //     current_dir == 2;
+            // }
+        }
+
+        //////////////////////
+        // sync data
+        //////////////////////
+
+        var oIds = []
+        var carId = '1-1';
+        var direction = "1"
+        var blink = false;
+
+        function getObstacle() {
+            var url = "/api/get-obstacle"
+            $.get(url, function (data) {
+                $(".result").html(data)
+                oIds = data['data']['obstacles']
+            });
+        }
+
+        function setObstacle(oid) {
+            var url = "/api/set-obstacle/" + oid
+            $.get(url, function (data) {
+                $(".result").html(data);
+                getObstacle()
+            });
+
+        }
+
+
+        function carSync() {
+            var url = "/api/get_manual_receive";
+
+            $.get(url, function (data) {
+                $(".result").html(data);
+                // alert( "Load was performed." );
+                // console.log(data);
+                var data = data['data'];
+                var recv_id = data['recv_id'];
+                var send_id = data['send_id'];
+                console.log("-------recv id --------")
+                console.log(recv_id)
+                console.log("------send id --------")
+                console.log(send_id)
+                var done_id = data['done_id'];
+                console.log(data)
+                console.log(done_id)
+                console.log((recv_id != -1) && (parseInt(done_id) < recv_id))
+                console.log("1-1" + ".." + data['obstacle'])
+                if (send_id == -1) {
+                    console.log("enter -1 statement")
+                    get('/api/done-update/' + send_id)
+
+                } else if (recv_id != -1 && recv_id == send_id && parseInt(done_id) < recv_id) {
+                    console.log("enter update statment")
+                    direction = data['direction']
+                    console.log(send_id)
+                    carId = data['grid_id']
+                    refreshTable(document, 4, 5)
+
+                    console.log("-------car update")
+                    // update_car(document, data, dir);
+                    //print(data["obstacle"])
+                    if (data['obstacle'] != "0") {
+                        var chars = data["grid_id"].split('-');
+                        console.log(data["grid_id"])
+                        var x = parseInt(chars[0])
+                        var y = parseInt(chars[1])
+                        var k = parseInt(chars[0]) + 1
+                        // console.log(k + 1 + "-")
+
+                        var ido;
+                        if (direction == 0) {
+                            if (x - 1 > 0) { ido = (x - 1) + "-" + y }
+
+                        } else if (direction == 1) {
+                            if (y + 1 <= 5) { ido = x + "-" + (y + 1) }
+
+                        } else if (direction == 2) {
+                            if (x + 1 <= 4) { ido = (x + 1) + "-" + y }
+
+                        } else if (direction == 3) {
+                            if (y - 1 > 0) { ido = x + "-" + (y - 1) }
+
+                        }
+
+                        console.log('----ido-------')
+                        console.log(ido)
+                        console.log('----ido-------')
+                        // update_obstacle(document, ido)
+                        console.log('--------ido------')
+                        var idoc = ido + "9" + data['obstacle']
+                        setObstacle(idoc)
+
+                    }
+                    get('/api/done-update/' + send_id)
+
+                    blink = false;
+                } else if (send_id != -1 && recv_id < send_id) {
+
+                    console.log(data)
+
+
+                    //direction = data['direction']
+                    console.log(send_id)
+                    //carId = data['grid_id']
+                    console.log(blink)
+                    blink = true;
+                    // } else {
+                    // console.log("wait" + send_id + recv_id)
+                }
+            });
+        }
+
+
+        function flashRed() {
+            if (blink) {
+
+                console.log("---------blink-------")
+                console.log(blink)
+                var today = new Date();
+                var s = today.getSeconds()
+                console.log(s)
+                console.log(carId)
+                var car = document.getElementById(carId);
+                console.log('---------------')
+                // console.log(carId);
+                //console.log(car.style.backgroundColor)
+                // console.log(car)
+                console.log('---------------')
+                var colors = ['#dc3545', '#ffc107']
+                car.style.backgroundColor = colors[s % 2]
+                // if (s % 2 == 0) {
+                //     // bgc = '#F75000'
+                //     car.style.backgroundColor = '#dc3545'
+                // } else {
+                //     car.style.backgroundColor = '#ffc107'
+                // }
+
+            }
+        }
+
+        function flashOrange() {
+            var car = document.getElementById(carId);
+            car.style.backgroundColor = '#ffc107'
+        }
+
+        function roverRefreshAll(document, carId, direction) {
+            //     carSync()
+            refreshTable(document, 4, 5)
+            carSync()
+            // console.log(oIds)
+            // console.log('----------')
+            getObstacle()
+            if (oIds.length > 0) {
+                console.log(oIds)
+                fillObstacle(document, oIds)
+            }
+
+            fillCar(document, carId, direction)
+        }
+
+        setInterval("roverRefreshAll(document, carId, direction)", 1000);
+        // setInterval("flashOrange()", 500)
+        setInterval("flashRed()", 1000)
+        // setInterval("flashOrange()", 500)
+
+    </script>
+
+</body>
+
+
+</html>
